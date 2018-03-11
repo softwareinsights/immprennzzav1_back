@@ -142,8 +142,27 @@ Salidastock.insert = (Salidastock, next) => {
     connection.query(query, keys, (error, result) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Salidastock cread@' });
+        else {
+
+
+            // ACTUALIZAR CANTIDAD DE STOCK
+            query = 'UPDATE stock SET cantidad = cantidad - ? WHERE idstock = ?';
+            keys = [Salidastock.cantidad, Salidastock.stock_idstock];
+
+            connection.query(query, keys, (error, stock) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                else {
+
+                    return next(null, { success: true, result: stock, message: 'Salidastock creada, Stock actualizado' });
+                    
+                }
+            });
+
+
+
+        }
+            
     });
 };
 
@@ -195,7 +214,7 @@ Salidastock.remove = (idsalidastock, created_by, next) => {
     });
 };
 
-Salidastock.logicRemove = (idsalidastock, created_by, next) => {
+Salidastock.logicRemove = (idsalidastock, cantidad, idstock, created_by, next) => {
     if( !connection )
         return next('Connection refused');
 
@@ -214,8 +233,26 @@ Salidastock.logicRemove = (idsalidastock, created_by, next) => {
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se eliminaba el registro' });
         else if (result.affectedRows === 0)
             return next(null, { success: false, result: result, message: 'Solo es posible eliminar registros propios' });
-        else
-            return next(null, { success: true, result: result, message: 'Salidastock eliminad@' });
+        else {
+
+
+            // ACTUALIZAR CANTIDAD DE STOCK
+            query = 'UPDATE stock SET cantidad = cantidad + ? WHERE idstock = ?';
+            keys = [cantidad, idstock];
+
+            connection.query(query, keys, (error, stock) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                else {
+
+                    return next(null, { success: true, result: stock, message: 'Salidastock eliminada, Stock actualizado' });
+                    
+                }
+            });
+
+
+        }
+        
     });
 };
 

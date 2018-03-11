@@ -4,6 +4,25 @@ const passport = require('passport');
 const permissions = require('../config/permissions');
 
 router
+
+
+    .post('/calcular-precio', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'ordenproducto', auth_data.user.super, 'writeable', (error, permission) => {
+                if (permission.success) {
+                    const _calculo = req.body;
+                    _calculo.created_by = auth_data.user.idsi_user;
+                    Ordenproducto.calcularPrecio( _calculo, (error, data) =>{
+                        return Ordenproducto.response(res, error, data);
+                    });
+                } else {
+                    return Ordenproducto.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
+
+
     .get('/orden/:idorden', (req, res, next) => {
         passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
             permissions.module_permission(auth_data.modules, 'ordenproducto', auth_data.user.super, 'readable', (error, permission) => {

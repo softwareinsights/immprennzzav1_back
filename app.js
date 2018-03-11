@@ -7,6 +7,8 @@ const passport = require('passport');
 
 //Route importation.
 const abono = require('./routes/abonos');
+const accuracyestimacion = require('./routes/accuracyestimacions');
+const accuracytiempo = require('./routes/accuracytiempos');
 const alerta = require('./routes/alertas');
 const archivo = require('./routes/archivos');
 const area = require('./routes/areas');
@@ -40,6 +42,7 @@ const stock = require('./routes/stocks');
 const tarea = require('./routes/tareas');
 const tipoalerta = require('./routes/tipoalertas');
 const tipoprecio = require('./routes/tipoprecios');
+const dashboard = require('./routes/dashboards');
 
 // Express Instance
 const app = express();
@@ -57,6 +60,8 @@ require('./config/passport')(passport);
 
 // Warehouses
 app.use('/abono', abono);
+app.use('/accuracyestimacion', accuracyestimacion);
+app.use('/accuracytiempo', accuracytiempo);
 app.use('/alerta', alerta);
 app.use('/archivo', archivo);
 app.use('/area', area);
@@ -90,6 +95,7 @@ app.use('/stock', stock);
 app.use('/tarea', tarea);
 app.use('/tipoalerta', tipoalerta);
 app.use('/tipoprecio', tipoprecio);
+app.use('/dashboard', dashboard);
 
 // Set port
 app.listen(3000);

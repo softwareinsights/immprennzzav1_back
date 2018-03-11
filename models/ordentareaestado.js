@@ -9,10 +9,10 @@ Ordentareaestado.findByIdEstadoscrum = (idEstadoscrum, created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.estadoscrum_idestadoscrum = ? AND ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.estadoscrum_idestadoscrum = ? AND ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [idEstadoscrum, created_by];
     } else {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.estadoscrum_idestadoscrum = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.estadoscrum_idestadoscrum = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [idEstadoscrum];
     }
 
@@ -32,10 +32,10 @@ Ordentareaestado.findByIdOrdentarea = (idOrdentarea, created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.ordentarea_idordentarea = ? AND ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.ordentarea_idordentarea = ? AND ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [idOrdentarea, created_by];
     } else {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.ordentarea_idordentarea = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.ordentarea_idordentarea = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [idOrdentarea];
     }
 
@@ -55,10 +55,10 @@ Ordentareaestado.all = (created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE ordentareaestado.created_by = ? HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [created_by];
     } else {
-        query = 'SELECT ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
+        query = 'SELECT cpersona.nombre as cliente, ordentareaestado.*, _tarea.nombre as ordentarea_ordentarea_idordentarea , _estadoscrum_idestadoscrum.nombre as estadoscrum_estadoscrum_idestadoscrum FROM ordentareaestado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = ordentareaestado.ordentarea_idordentarea INNER JOIN estadoscrum as _estadoscrum_idestadoscrum ON _estadoscrum_idestadoscrum.idestadoscrum = ordentareaestado.estadoscrum_idestadoscrum INNER JOIN ordenproducto as op on op.idordenproducto = _ordentarea_idordentarea.ordenproducto_idordenproducto INNER JOIN orden as o on o.idorden = op.orden_idorden INNER JOIN cliente as c on c.idcliente = o.cliente_idcliente INNER JOIN persona as cpersona on cpersona.idpersona = c.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  HAVING ordentareaestado.baja IS NULL OR ordentareaestado.baja = false';
         keys = [];
     }
 
@@ -142,8 +142,31 @@ Ordentareaestado.insert = (Ordentareaestado, next) => {
     connection.query(query, keys, (error, result) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Ordentareaestado cread@' });
+        else {
+
+            if (result.insertId) {
+
+                if (Ordentareaestado.estadoscrum_idestadoscrum === '4') {
+
+                    // SI SE FINALIZA MODIFICAR LA ORDEN PARA ASIGNAR LA HORA Y FECHA DE TÉRMINO
+                    query = 'UPDATE ordentarea SET fechaTermina = ?, horaTermina = ? WHERE idordentarea = ?';
+                    keys = [Ordentareaestado.fecha, Ordentareaestado.hora, Ordentareaestado.ordentarea_idordentarea];
+                    connection.query(query, keys, (error, result) => {
+                        if(error) 
+                            return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                        else {
+                            return next(null, { success: true, result: result, message: 'Orden tarea estado creada. Se ha actualizado Fecha y Hora de término de la tarea de orden' });
+                        }
+                    });
+
+                } else {
+                    return next(null, { success: true, result: result, message: 'Orden tarea estado creada' });
+                }
+
+            }
+
+        }
+            
     });
 };
 

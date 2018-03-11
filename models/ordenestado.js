@@ -142,8 +142,9 @@ Ordenestado.insert = (Ordenestado, next) => {
     connection.query(query, keys, (error, result) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Ordenestado cread@' });
+        else {
+            return next(null, { success: true, result: result, message: 'Ordenestado creado' });
+        }
     });
 };
 

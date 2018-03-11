@@ -142,8 +142,80 @@ Empleadotareaestado.insert = (Empleadotareaestado, next) => {
     connection.query(query, keys, (error, result) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Empleadotareaestado cread@' });
+        else {
+            if (result.insertId) {
+
+
+
+
+
+
+
+                console.log("result", result);
+                console.log("Empleadotareaestado", Empleadotareaestado);
+
+                // PRIMERO BUSCO EL ordentarea_idordentarea RELACIONADO A EMPLEADOTAREAESTADO
+                query = 'SELECT et.ordentarea_idordentarea FROM empleadotarea as et  WHERE et.idempleadotarea = ?';
+                keys = [Empleadotareaestado.empleadotarea_idempleadotarea];
+
+                console.log("query", query);
+
+
+
+                connection.query(query, keys, (error, empleadotareaestado) => {
+                    if(error) 
+                        return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                    else {
+
+                        console.log("empleadotareaestado", empleadotareaestado);
+
+
+                        const idordentarea = empleadotareaestado[0].ordentarea_idordentarea;
+                        console.log("idordentarea", idordentarea);
+
+                        // IGUALMENTE AGREGAR EL MISMO ESTADO A ORDEN TAREA . POR HACERSE
+                        const ordentareaestado = {
+                            'ordentarea_idordentarea':  idordentarea,
+                            'estadoscrum_idestadoscrum': Empleadotareaestado.estadoscrum_idestadoscrum,
+                            'fecha': Empleadotareaestado.fecha,
+                            'hora': Empleadotareaestado.hora,
+                            'created_by': Empleadotareaestado.created_by
+                        }
+
+                        
+                        console.log("ordentareaestado", ordentareaestado);
+
+                        query = 'INSERT INTO ordentareaestado SET ?';
+                        keys = [ordentareaestado];
+
+                        connection.query(query, keys, (error, result) => {
+                            if(error) 
+                                return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                            else
+                                return next(null, { success: true, result: result, message: 'Empleadotarea, empleadotareaestado y ordentareaestado creado' });
+                        });
+
+
+                    }
+                });
+
+
+
+
+
+
+
+
+            } else {
+
+                return next(null, { success: false, result: result, message: 'No se pudo crear el registro' });
+
+            }
+
+
+
+        }
+           
     });
 };
 

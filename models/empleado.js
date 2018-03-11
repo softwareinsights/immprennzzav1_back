@@ -2,6 +2,47 @@ const connection = require('../config/db-connection');
 
 const Empleado = {};
 
+
+Empleado.allByAreaWithIdOrdenTarea = (idordentarea, created_by, next) => {
+    if( !connection )
+        return next('Connection refused');
+
+    let query = '';
+    let keys = [];
+
+    // SELECCIONA EL IDAREA CORRESPONDIENTE A LA ORDENTAREA
+    query = 'SELECT a.idarea FROM ordentarea as ot INNER JOIN tarea as t on t.idtarea = ot.tarea_idtarea INNER JOIN area as a on a.idarea = t.area_idarea WHERE idordentarea = ?';
+    keys = [idordentarea];
+    connection.query(query, keys, (error, ordentarea) => {
+        if(error)
+            return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
+        else if (ordentarea.affectedRows === 0)
+            return next(null, { success: false, result: ordentarea, message: 'Solo es posible encontrar registros propios' });
+        else {
+
+            // BUSCA LOS EMPLEADOS CON LA MISMA ÁREA
+            if (created_by) {
+                query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? AND empleado.created_by = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
+                keys = [ordentarea[0].idarea, created_by];
+            } else {
+                query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
+                keys = [ordentarea[0].idarea];
+            }
+
+            connection.query(query, keys, (error, result) => {
+                if(error)
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
+                else if (result.affectedRows === 0)
+                    return next(null, { success: false, result: result, message: 'Solo es posible encontrar registros propios' });
+                else
+                    return next(null, { success: true, result: result, message: 'Empleado encontrad@' });
+            });
+
+        }
+    });
+
+};
+
 Empleado.findByIdArea = (idArea, created_by, next) => {
     if( !connection )
         return next('Connection refused');

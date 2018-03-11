@@ -4,6 +4,41 @@ const passport = require('passport');
 const permissions = require('../config/permissions');
 
 router
+    .post('/tarea-tiempo-estimado', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'ordentarea', auth_data.user.super, 'writeable', (error, permission) => {
+                if (permission.success) {
+                    const _ordentarea = req.body;
+                    _ordentarea.created_by = auth_data.user.idsi_user;
+                    Ordentarea.tareaTiempoEstimado( _ordentarea, (error, data) =>{
+                        return Ordentarea.response(res, error, data);
+                    });
+                } else {
+                    return Ordentarea.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
+
+
+
+
+    .get('/empleadotarea/:idempleadotarea', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'ordentarea', auth_data.user.super, 'readable', (error, permission) => {
+                if (permission.success) {
+                    const created_by = (permission.only_own) ? auth_data.user.idsi_user : false;
+                    Ordentarea.findByIdEmpleadotarea(req.params.idempleadotarea, created_by, (error, data) => {
+                        return Ordentarea.response(res, error, data);
+                    })
+                } else {
+                    return Ordentarea.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
+
+
     .get('/tarea/:idtarea', (req, res, next) => {
         passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
             permissions.module_permission(auth_data.modules, 'ordentarea', auth_data.user.super, 'readable', (error, permission) => {

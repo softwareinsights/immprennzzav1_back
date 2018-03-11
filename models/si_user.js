@@ -83,7 +83,9 @@ Si_user.login = ( email, password, next ) => {
                             success: true,
                             message: 'Has iniciado sesión correctamente',
                             token: token,
-                            modules: modules
+                            modules: modules,
+                            iduser: result[0].idsi_user,
+                            email: result[0].email
                         });
                     });
                 } else
@@ -108,10 +110,10 @@ Si_user.all = (created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT si_user.* FROM si_user WHERE created_by = ? HAVING si_user.baja IS NULL OR si_user.baja = false';
+        query = 'SELECT si_user.*, si_rol.nombre as si_rol_Rol_idsi_rol FROM si_user INNER JOIN si_rol on si_rol.idsi_rol = si_user.Rol_idsi_rol WHERE created_by = ? HAVING si_user.baja IS NULL OR si_user.baja = false';
         keys = [created_by];
     } else {
-        query = 'SELECT si_user.* FROM si_user HAVING si_user.baja IS NULL OR si_user.baja = false';
+        query = 'SELECT si_user.*, si_rol.nombre as si_rol_Rol_idsi_rol FROM si_user INNER JOIN si_rol on si_rol.idsi_rol = si_user.Rol_idsi_rol HAVING si_user.baja IS NULL OR si_user.baja = false';
         keys = [];
     }
 
@@ -186,7 +188,7 @@ Si_user.exist = (idSi_user, next) => {
 Si_user.update = (Si_user, created_by, next) => {
     if( !connection )
         return next('Connection refused');
-
+    
     let query = '';
     let keys = [];
     if (created_by) {
@@ -197,14 +199,46 @@ Si_user.update = (Si_user, created_by, next) => {
         keys = [Si_user, Si_user.idsi_user];
     }
 
-    connection.query(query, keys, (error, result) => {
-        if(error) 
-            return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se actualizaba el registro' });
-        else if (result.affectedRows === 0)
-            return next(null, { success: false, result: result, message: 'Solo es posible editar registros propios' });
-        else
-            return next(null, { success: true, result: result, message: 'Si_user actualizad@' });
-    });
+    if (Si_user.password) {
+
+        // Hash password
+        bcrypt.hash(Si_user.password, saltRounds)
+        .then( hash => {
+            Si_user.password = hash;
+
+            connection.query(query, keys, (error, result) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se actualizaba el registro' });
+                else if (result.affectedRows === 0)
+                    return next(null, { success: false, result: result, message: 'Solo es posible editar registros propios' });
+                else
+                    return next(null, { success: true, result: result, message: 'Usuario actualizado' });
+            });
+
+        });
+
+    } else {
+
+        const user = {
+            'idsi_user': Si_user.idsi_user,
+            'email': Si_user.email,
+            'usuario': Si_user.usuario,
+        };
+
+        connection.query(query, [user, Si_user.idsi_user], (error, result) => {
+            if(error) 
+                return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se actualizaba el registro' });
+            else if (result.affectedRows === 0)
+                return next(null, { success: false, result: result, message: 'Solo es posible editar registros propios' });
+            else {
+                return next(null, { success: true, result: result, message: 'Usuario actualizado' });
+            }
+        });
+
+
+    }
+
+   
 };
 
 Si_user.remove = (idsi_user, created_by, next) => {

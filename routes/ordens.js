@@ -4,7 +4,36 @@ const passport = require('passport');
 const permissions = require('../config/permissions');
 
 router
-
+    .patch('/entrega/', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'orden', auth_data.user.super, 'updateable', (error, permission) => {
+                if (permission.success) {
+                    const _orden = req.body;
+                    const created_by = (permission.only_own) ? auth_data.user.idsi_user : false;
+                    Orden.entregaOrden(_orden, created_by, (error, data) => {
+                        return Orden.response(res, error, data);
+                    })
+                } else {
+                    return Orden.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
+    .patch('/finaliza/', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'orden', auth_data.user.super, 'updateable', (error, permission) => {
+                if (permission.success) {
+                    const _orden = req.body;
+                    const created_by = (permission.only_own) ? auth_data.user.idsi_user : false;
+                    Orden.finalizaOrden(_orden, created_by, (error, data) => {
+                        return Orden.response(res, error, data);
+                    })
+                } else {
+                    return Orden.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
     .get('/montos/:id', (req, res, next) => {
         passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
             permissions.module_permission(auth_data.modules, 'orden', auth_data.user.super, 'readable', (error, permission) => {

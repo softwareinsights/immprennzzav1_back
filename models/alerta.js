@@ -54,21 +54,75 @@ Alerta.all = (created_by, next) => {
 
     let query = '';
     let keys = [];
+    
+    // PRIMERO LAS ENVIADAS
     if (created_by) {
-        query = 'SELECT alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado INNER JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona  WHERE alerta.created_by = ? HAVING alerta.baja IS NULL OR alerta.baja = false';
+        query = 'SELECT _perremitente.nombre as remitente, alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta LEFT JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado LEFT JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona LEFT JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta LEFT JOIN empleado as emplremitente on emplremitente.si_user_idsi_user = alerta.created_by LEFT JOIN persona as _perremitente ON _perremitente.idpersona = emplremitente.persona_idpersona WHERE alerta.created_by = ? HAVING alerta.baja IS NULL OR alerta.baja = false ORDER BY alerta.created_at DESC';
         keys = [created_by];
     } else {
-        query = 'SELECT alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado INNER JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona  HAVING alerta.baja IS NULL OR alerta.baja = false';
+        query = 'SELECT _perremitente.nombre as remitente, alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta LEFT JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado LEFT JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona LEFT JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta LEFT JOIN empleado as emplremitente on emplremitente.si_user_idsi_user = alerta.created_by LEFT JOIN persona as _perremitente ON _perremitente.idpersona = emplremitente.persona_idpersona HAVING alerta.baja IS NULL OR alerta.baja = false ORDER BY alerta.created_at DESC';
         keys = [];
     }
 
-    connection.query(query, keys, (error, result) => {
+    connection.query(query, keys, (error, enviadas) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se leían registros' });
-        else if (result.affectedRows === 0)
-            return next(null, { success: false, result: result, message: 'Solo es posible leer registros propios' });
-        else
-            return next(null, { success: true, result: result, message: 'Alerta leíd@' });
+        else if (enviadas.affectedRows === 0)
+            return next(null, { success: false, result: enviadas, message: 'Solo es posible leer registros propios' });
+        else {
+
+            // DESPUÉS LAS RECIBIDAS
+            if (created_by) {
+                query = 'SELECT _perremitente.nombre as remitente, alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta LEFT JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado LEFT JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona LEFT JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta LEFT JOIN empleado as emplremitente on emplremitente.si_user_idsi_user = alerta.created_by LEFT JOIN persona as _perremitente ON _perremitente.idpersona = emplremitente.persona_idpersona WHERE _empleado_idempleado.si_user_idsi_user = ? HAVING alerta.baja IS NULL OR alerta.baja = false ORDER BY alerta.created_at DESC';
+                keys = [created_by];
+            } else {
+                query = 'SELECT _perremitente.nombre as remitente, alerta.*, _persona.nombre as empleado_empleado_idempleado , _tipoalerta_idtipoalerta.nombre as tipoalerta_tipoalerta_idtipoalerta FROM alerta LEFT JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = alerta.empleado_idempleado LEFT JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona LEFT JOIN tipoalerta as _tipoalerta_idtipoalerta ON _tipoalerta_idtipoalerta.idtipoalerta = alerta.tipoalerta_idtipoalerta LEFT JOIN empleado as emplremitente on emplremitente.si_user_idsi_user = alerta.created_by LEFT JOIN persona as _perremitente ON _perremitente.idpersona = emplremitente.persona_idpersona HAVING alerta.baja IS NULL OR alerta.baja = false ORDER BY alerta.created_at DESC';
+                keys = [];
+            }
+
+            connection.query(query, keys, (error, recibidas) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se leían registros' });
+                else if (recibidas.affectedRows === 0)
+                    return next(null, { success: false, result: recibidas, message: 'Solo es posible leer registros propios' });
+                else {
+
+                    for (let i = 0; i < recibidas.length; i++) {
+
+                        let idalerta = recibidas[i].idalerta;
+                        recibidas[i].vista = 1;
+
+                        // ACTUALIZA
+                        if (created_by) {
+                            query = 'UPDATE alerta SET vista = true WHERE idalerta = ?';
+              
+                            keys = [idalerta];
+                        } else {
+                            query = 'UPDATE alerta SET vista = true WHERE idalerta = ?';
+                            keys = [idalerta];
+                        }
+
+                        connection.query(query, keys, (error, updated) => {
+                            if(error) 
+                                return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se actualizaban registros' });
+                            else if (updated.affectedRows === 0)
+                                return next(null, { success: false, result: updated, message: 'Solo es posible actualizar registros propios' });
+                            else {
+
+                                // SI YA HA BARRIDO TODAS
+                                if ( i === (recibidas.length - 1) ) {
+                                    const result = {
+                                        "recibidas": recibidas,
+                                        "enviadas": enviadas,
+                                    };
+                                    return next(null, { success: true, result: result, message: 'Alertas leídas' });
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
     });
 };
 
@@ -134,17 +188,41 @@ Alerta.insert = (Alerta, next) => {
     if( !connection )
         return next('Connection refused');
 
+    // TOMAR DE ALERTA EL empleado_idempleado PARA OBTENER EL IDUSUARIO DE ESE EMPLEADO PARA AGREGARLO COMO created_by
     let query = '';
     let keys = [];
-    query = 'INSERT INTO alerta SET ?';
-    keys = [Alerta];
+    query = 'SELECT si_user_idsi_user FROM empleado WHERE idempleado = ?';
+    keys = [Alerta.empleado_idempleado];
 
-    connection.query(query, keys, (error, result) => {
+    connection.query(query, keys, (error, empleado) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Alerta cread@' });
+        else {
+
+            // AL EMPLEADO QUE VA DIRIGIDO SE AGREGA COMO created_by PARA QUE SEA LEIDO SOLO POR ESE USUARIO
+            //Alerta.created_by = empleado[0].si_user_idsi_user;    ES POSIBLE QUE NO SE VAYA A UTILIZAR DE ESTA MANERA
+
+            query = 'INSERT INTO alerta SET ?';
+            keys = [Alerta];
+
+            connection.query(query, keys, (error, result) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+            else {
+
+
+                console.log("empleado", empleado);
+                console.log("result", result);
+
+                    return next(null, { success: true, result: result, message: 'Alerta cread@' });
+
+
+                }
+            });
+
+        }
     });
+
 };
 
 Alerta.update = (Alerta, created_by, next) => {

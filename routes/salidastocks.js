@@ -86,12 +86,12 @@ router
             });
         })(req, res, next);
     })
-    .delete('/:id', (req, res, next) => {
+    .delete('/:id/:cantidad/:idstock', (req, res, next) => {
         passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
             permissions.module_permission(auth_data.modules, 'salidastock', auth_data.user.super, 'deleteable', (error, permission) => {
                 if (permission.success) {
                     const created_by = (permission.only_own) ? auth_data.user.idsi_user : false;
-                    Salidastock.logicRemove(req.params.id, created_by, (error, data) => {
+                    Salidastock.logicRemove(req.params.id, req.params.cantidad, req.params.idstock, created_by, (error, data) => {
                         return Salidastock.response(res, error, data);
                     })
                 } else {

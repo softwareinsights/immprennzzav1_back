@@ -9,10 +9,10 @@ Empleadotarea.findByIdEmpleado = (idEmpleado, created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.empleado_idempleado = ? AND empleadotarea.created_by = ? HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones, empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.empleado_idempleado = ? AND empleadotarea.created_by = ?   GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [idEmpleado, created_by];
     } else {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.empleado_idempleado = ? HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones, empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.empleado_idempleado = ?   GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [idEmpleado];
     }
 
@@ -32,10 +32,10 @@ Empleadotarea.findByIdOrdentarea = (idOrdentarea, created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.ordentarea_idordentarea = ? AND empleadotarea.created_by = ? HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones, empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.ordentarea_idordentarea = ? AND empleadotarea.created_by = ?   GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [idOrdentarea, created_by];
     } else {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.ordentarea_idordentarea = ? HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones, empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.ordentarea_idordentarea = ?   GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [idOrdentarea];
     }
 
@@ -55,10 +55,10 @@ Empleadotarea.all = (created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.created_by = ? HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones, empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  WHERE empleadotarea.created_by = ?   GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [created_by];
     } else {
-        query = 'SELECT empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
+        query = 'SELECT (SELECT es.nombre FROM empleadotarea as ot INNER JOIN empleadotareaestado as ote on ot.idempleadotarea = ote.empleadotarea_idempleadotarea INNER JOIN estadoscrum as es on es.idestadoscrum = ote.estadoscrum_idestadoscrum WHERE ot.idempleadotarea = empleadotarea.idempleadotarea ORDER BY ote.created_at DESC LIMIT 0,1) as estado_estado_idestado,  _ordentarea_idordentarea.*, _ordentarea_idordentarea.especificaciones as ordentarea_especificaciones,empleadotarea.*, _persona.nombre as empleado_empleado_idempleado , _tarea.nombre as ordentarea_ordentarea_idordentarea FROM empleadotarea INNER JOIN empleado as _empleado_idempleado ON _empleado_idempleado.idempleado = empleadotarea.empleado_idempleado INNER JOIN ordentarea as _ordentarea_idordentarea ON _ordentarea_idordentarea.idordentarea = empleadotarea.ordentarea_idordentarea INNER JOIN persona as _persona ON _persona.idpersona = _empleado_idempleado.persona_idpersona INNER JOIN tarea as _tarea ON _tarea.idtarea = _ordentarea_idordentarea.tarea_idtarea    GROUP BY empleadotarea.idempleadotarea  HAVING empleadotarea.baja IS NULL OR empleadotarea.baja = false';
         keys = [];
     }
 
@@ -134,17 +134,92 @@ Empleadotarea.insert = (Empleadotarea, next) => {
     if( !connection )
         return next('Connection refused');
 
+    // AÑADIR ID USER DE EMPLEADO EN EMPLEADOTAREA CREATED BY
     let query = '';
     let keys = [];
-    query = 'INSERT INTO empleadotarea SET ?';
-    keys = [Empleadotarea];
+    query = 'SELECT si_user_idsi_user FROM empleado WHERE idempleado = ?';
+    keys = [Empleadotarea.empleado_idempleado];
 
     connection.query(query, keys, (error, result) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
-        else
-            return next(null, { success: true, result: result, message: 'Empleadotarea cread@' });
+        else {
+
+            const idsi_user = result[0].si_user_idsi_user;
+
+            Empleadotarea.created_by = idsi_user;
+
+            query = 'INSERT INTO empleadotarea SET ?';
+            keys = [Empleadotarea];
+
+            connection.query(query, keys, (error, result) => {
+                if(error) 
+                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                else {
+
+                    // GENERAR FECHA Y HORA ACTUAL
+                    const date = new Date();
+                    const month = (date.getMonth() + 1);
+                    const day = date.getDate();
+                    const fecha = date.getFullYear() + "-" + ((month < 10) ? "0" : "") + month + "-" + ((day < 10) ? "0" : "") + day;
+                    const hour = date.getHours();
+                    const minutes = date.getMinutes();
+                    const hora = ((hour < 10) ? "0" : "") + hour + ':' + ((minutes < 10) ? "0" : "") + minutes;
+
+                    // AL AGREGAR EMPLEADO TAREA TAMBIÉN AGREGAR UN ESTADO SCRUM 1 POR HACERSE
+                    const empleadotareaestado = {
+                        'empleadotarea_idempleadotarea':  result.insertId,
+                        'estadoscrum_idestadoscrum': 1,
+                        'fecha': fecha,
+                        'hora': hora,
+                        'created_by': idsi_user
+                    }
+
+                    query = 'INSERT INTO empleadotareaestado SET ?';
+                    keys = [empleadotareaestado];
+
+                    connection.query(query, keys, (error, result) => {
+                        if(error) 
+                            return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                        else {
+
+
+
+                            // IGUALMENTE AGREGAR EL MISMO ESTADO A ORDEN TAREA . POR HACERSE
+                            const ordentareaestado = {
+                                'ordentarea_idordentarea':  Empleadotarea.ordentarea_idordentarea,
+                                'estadoscrum_idestadoscrum': 1,
+                                'fecha': fecha,
+                                'hora': hora,
+                                'created_by': idsi_user
+                            }
+
+                            query = 'INSERT INTO ordentareaestado SET ?';
+                            keys = [ordentareaestado];
+
+                            connection.query(query, keys, (error, result) => {
+                                if(error) 
+                                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro' });
+                                else
+                                    return next(null, { success: true, result: result, message: 'Empleadotarea, empleadotareaestado y ordentareaestado creado' });
+                            });
+
+
+
+
+
+
+
+                        }
+                            
+                    });
+
+                }
+            });
+
+        }
     });
+
 };
 
 Empleadotarea.update = (Empleadotarea, created_by, next) => {

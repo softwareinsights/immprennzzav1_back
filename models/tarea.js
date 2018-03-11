@@ -2,6 +2,55 @@ const connection = require('../config/db-connection');
 
 const Tarea = {};
 
+
+
+Tarea.allByAreaWithIdOrdenProducto = (idordenproducto, created_by, next) => {
+    if( !connection )
+        return next('Connection refused');
+
+    let query = '';
+    let keys = [];
+
+
+    // SELECCIONA EL IDAREA CORRESPONDIENTE A LA ORDENTAREA
+    query = 'SELECT a.idarea FROM ordenproducto as op INNER JOIN producto as t on t.idproducto = op.producto_idproducto INNER JOIN area as a on a.idarea = t.area_idarea WHERE idordenproducto = ?';
+    keys = [idordenproducto];
+    connection.query(query, keys, (error, ordenproducto) => {
+        if(error)
+            return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
+        else if (ordenproducto.affectedRows === 0)
+            return next(null, { success: false, result: ordenproducto, message: 'Solo es posible encontrar registros propios' });
+        else {
+
+            console.log("ordenproducto", ordenproducto);
+            if (ordenproducto[0]) {
+
+                if (created_by) {
+                    query = 'SELECT tarea.*, _producto_idproducto.nombre as producto_producto_idproducto , _area_idarea.nombre as area_area_idarea FROM tarea INNER JOIN producto as _producto_idproducto ON _producto_idproducto.idproducto = tarea.producto_idproducto INNER JOIN area as _area_idarea ON _area_idarea.idarea = tarea.area_idarea   WHERE tarea.area_idarea = ? AND tarea.created_by = ? HAVING tarea.baja IS NULL OR tarea.baja = false';
+                    keys = [ordenproducto[0].idarea, created_by];
+                } else {
+                    query = 'SELECT tarea.*, _producto_idproducto.nombre as producto_producto_idproducto , _area_idarea.nombre as area_area_idarea FROM tarea INNER JOIN producto as _producto_idproducto ON _producto_idproducto.idproducto = tarea.producto_idproducto INNER JOIN area as _area_idarea ON _area_idarea.idarea = tarea.area_idarea   WHERE tarea.area_idarea = ? HAVING tarea.baja IS NULL OR tarea.baja = false';
+                    keys = [ordenproducto[0].idarea];
+                }
+
+                connection.query(query, keys, (error, result) => {
+                    if(error)
+                        return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
+                    else if (result.affectedRows === 0)
+                        return next(null, { success: false, result: result, message: 'Solo es posible encontrar registros propios' });
+                    else
+                        return next(null, { success: true, result: result, message: 'Tarea encontrad@' });
+                });
+
+            } else {
+                return next(null, { success: false, result: ordenproducto, message: 'Tarea no encontrada' });
+            }
+
+        }
+    });
+
+};
+
 Tarea.findByIdArea = (idArea, created_by, next) => {
     if( !connection )
         return next('Connection refused');

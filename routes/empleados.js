@@ -4,6 +4,22 @@ const passport = require('passport');
 const permissions = require('../config/permissions');
 
 router
+
+    .get('/ordentarea/:idordentarea', (req, res, next) => {
+        passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
+            permissions.module_permission(auth_data.modules, 'empleado', auth_data.user.super, 'readable', (error, permission) => {
+                if (permission.success) {
+                    const created_by = (permission.only_own) ? auth_data.user.idsi_user : false;
+                    Empleado.allByAreaWithIdOrdenTarea(req.params.idordentarea, created_by, (error, data) => {
+                        return Empleado.response(res, error, data);
+                    })
+                } else {
+                    return Empleado.response(res, error, permission);
+                }
+            });
+        })(req, res, next);
+    })
+
     .get('/area/:idarea', (req, res, next) => {
         passport.authenticate('jwt', { session: true }, (err, auth_data, info) => {
             permissions.module_permission(auth_data.modules, 'empleado', auth_data.user.super, 'readable', (error, permission) => {

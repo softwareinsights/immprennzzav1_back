@@ -2,6 +2,122 @@ const connection = require('../config/db-connection');
 
 const Orden = {};
 
+
+Orden.entregaOrden = (Orden, created_by, next) => {
+    if( !connection )
+        return next('Connection refused');
+
+    let query = '';
+    let keys = [];
+
+
+    if (Orden.estado_estado_idestado === 'PAGADO SIN ENTREGAR' || Orden.estado_estado_idestado === 'SOBREPAGADO' || Orden.estado_estado_idestado === 'REALIZADO SIN ENTREGAR') {
+
+        // FECHA Y HORA ACTUAL
+        const date = new Date();
+        const month = (date.getMonth() + 1);
+        const now = date.getFullYear() + "-" + ((month < 10) ? "0" : "") + month + "-" + date.getDate();
+        const hour = date.getHours() + ":" + date.getMinutes();
+
+        const fecha = now;
+        const hora = hour;
+
+        // ESTADO ENTREGADO 
+        const Ordenestado = {
+            'orden_idorden': Orden.idorden,
+            'estado_idestado': 12,
+            'fecha': fecha,
+            'hora': hora
+        };
+
+        query = 'INSERT INTO ordenestado SET ?';
+        keys = [Ordenestado];
+
+        connection.query(query, keys, (error, result) => {
+            if(error) 
+                return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro de orden' });
+            else {
+
+                // ACTUALIZAR HORAeNTREGA Y FECHAeNTREGA DE ORDEN
+                const orden = {
+                    'idorden': Orden.idorden,
+                    'fechaEntregaReal': fecha,
+                    'horaEntregaReal': hora
+                };
+
+                if (created_by) {
+                    query = 'UPDATE orden SET ? WHERE idorden = ? AND created_by = ?';
+                    keys = [orden, Orden.idorden, created_by];
+                } else {
+                    query = 'UPDATE orden SET ? WHERE idorden = ?';
+                    keys = [orden, Orden.idorden];
+                }
+
+                connection.query(query, keys, (error, result) => {
+                    if(error) 
+                        return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se actualizaba el registro de orden' });
+                    else {
+
+                        return next(null, { success: true, result: result, message: 'Orden entregada' });
+
+                    }
+                });
+        
+            }
+        });
+
+    } else {
+        return next(null, { success: false, result: Orden, message: 'Solo órdenes sin entregar y pagadas pueden entregarse' });
+    }
+
+};
+
+Orden.finalizaOrden = (Orden, created_by, next) => {
+    if( !connection )
+        return next('Connection refused');
+
+    let query = '';
+    let keys = [];
+
+
+    if (Orden.estado_estado_idestado === 'SIN COSTO' || Orden.estado_estado_idestado === 'PAGADO SIN ENTREGAR' || Orden.estado_estado_idestado === 'PAGADO ENTREGADO') {
+
+        // FECHA Y HORA ACTUAL
+        const date = new Date();
+        const month = (date.getMonth() + 1);
+        const now = date.getFullYear() + "-" + ((month < 10) ? "0" : "") + month + "-" + date.getDate();
+        const hour = date.getHours() + ":" + date.getMinutes();
+
+        const fecha = now;
+        const hora = hour;
+
+        // ESTADO FINALIZADO 
+        const Ordenestado = {
+            'orden_idorden': Orden.idorden,
+            'estado_idestado': 11,
+            'fecha': fecha,
+            'hora': hora
+        };
+
+        query = 'INSERT INTO ordenestado SET ?';
+        keys = [Ordenestado];
+
+        connection.query(query, keys, (error, result) => {
+            if(error) 
+                return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se creaba el registro de orden' });
+            else {
+                return next(null, { success: true, result: result, message: 'Orden finalizada' });
+            }
+        });
+
+    } else {
+
+        return next(null, { success: false, result: Orden, message: 'Solo órdenes pagadas o sin costo pueden finalizarse' });
+
+    }
+
+};
+
 Orden.updateMontos = (idOrden, next) => {
     if( !connection )
         return next('Connection refused');
@@ -127,10 +243,10 @@ Orden.all = (created_by, next) => {
     let query = '';
     let keys = [];
     if (created_by) {
-        query = 'SELECT orden.*, _persona.nombre as cliente_cliente_idcliente, oex.nombre as estado_estado_idestado, oex.oeFecha as ordenestado_fecha, oex.oeHora as ordenestado_hora FROM orden INNER JOIN cliente as _cliente_idcliente ON _cliente_idcliente.idcliente = orden.cliente_idcliente INNER JOIN persona as _persona ON _persona.idpersona = _cliente_idcliente.persona_idpersona INNER JOIN ordenestado AS oe ON oe.orden_idorden = orden.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado JOIN(SELECT e.nombre, oe.fecha as oeFecha, oe.hora as oeHora, o.idorden as orden_idorden, oe.baja FROM orden AS o INNER JOIN ordenestado AS oe ON oe.orden_idorden = o.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado WHERE oe.orden_idorden = o.idorden HAVING oe.baja IS NULL OR oe.baja = false ORDER BY oe.idordenestado DESC LIMIT 0,1) as oex ON orden.idorden = oex.orden_idorden WHERE orden.created_by = ? GROUP BY orden.idorden HAVING orden.baja IS NULL OR orden.baja = false';
+        query = 'SELECT (SELECT e.nombre FROM orden as o INNER JOIN ordenestado as oe on o.idorden = oe.orden_idorden INNER JOIN estado as e on e.idestado = oe.estado_idestado  WHERE o.idorden = orden.idorden   ORDER BY oe.created_at DESC LIMIT 0,1) as estado_estado_idestado, orden.*, _persona.nombre as cliente_cliente_idcliente FROM orden INNER JOIN cliente as _cliente_idcliente ON _cliente_idcliente.idcliente = orden.cliente_idcliente INNER JOIN persona as _persona ON _persona.idpersona = _cliente_idcliente.persona_idpersona INNER JOIN ordenestado AS oe ON oe.orden_idorden = orden.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado  GROUP BY orden.idorden  WHERE orden.created_by = ? HAVING orden.baja IS NULL OR orden.baja = false  ORDER BY orden.idorden DESC';
         keys = [created_by];
     } else {
-        query = 'SELECT orden.*, _persona.nombre as cliente_cliente_idcliente, oex.nombre as estado_estado_idestado, oex.oeFecha as ordenestado_fecha, oex.oeHora as ordenestado_hora FROM orden INNER JOIN cliente as _cliente_idcliente ON _cliente_idcliente.idcliente = orden.cliente_idcliente INNER JOIN persona as _persona ON _persona.idpersona = _cliente_idcliente.persona_idpersona INNER JOIN ordenestado AS oe ON oe.orden_idorden = orden.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado JOIN(SELECT e.nombre, oe.fecha as oeFecha, oe.hora as oeHora, o.idorden as orden_idorden, oe.baja FROM orden AS o INNER JOIN ordenestado AS oe ON oe.orden_idorden = o.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado WHERE oe.orden_idorden = o.idorden HAVING oe.baja IS NULL OR oe.baja = false ORDER BY oe.idordenestado DESC LIMIT 0,1) as oex ON orden.idorden = oex.orden_idorden GROUP BY orden.idorden HAVING orden.baja IS NULL OR orden.baja = false';
+        query = 'SELECT (SELECT e.nombre FROM orden as o INNER JOIN ordenestado as oe on o.idorden = oe.orden_idorden INNER JOIN estado as e on e.idestado = oe.estado_idestado  WHERE o.idorden = orden.idorden   ORDER BY oe.created_at DESC LIMIT 0,1) as estado_estado_idestado, orden.*, _persona.nombre as cliente_cliente_idcliente FROM orden INNER JOIN cliente as _cliente_idcliente ON _cliente_idcliente.idcliente = orden.cliente_idcliente INNER JOIN persona as _persona ON _persona.idpersona = _cliente_idcliente.persona_idpersona INNER JOIN ordenestado AS oe ON oe.orden_idorden = orden.idorden INNER JOIN estado AS e ON e.idestado = oe.estado_idestado  GROUP BY orden.idorden  HAVING orden.baja IS NULL OR orden.baja = false  ORDER BY orden.idorden DESC';
         keys = [];
     }
     connection.query(query, keys, (error, result) => {
@@ -305,7 +421,6 @@ Orden.update = (Orden, created_by, next) => {
         }
     });
 };
-
 
 Orden.remove = (idorden, created_by, next) => {
     if( !connection )
