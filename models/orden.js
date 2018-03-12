@@ -125,7 +125,7 @@ Orden.updateMontos = (idOrden, next) => {
     // Obtengo el abono total para esta orden
     let query = '';
     let keys = [];
-    query = 'SELECT *, COALESCE(SUM(montoPagado),0) as abonado FROM abono WHERE orden_idorden = ? AND baja IS NULL';
+    query = 'SELECT *, COALESCE(SUM(montoPagado),0) as abonado FROM abono GROUP BY orden_idorden WHERE orden_idorden = ? AND baja IS NULL';
     keys = [idOrden];
 
     connection.query(query, keys, (error, abono) => {

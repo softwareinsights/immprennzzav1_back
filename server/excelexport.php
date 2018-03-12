@@ -1,6 +1,5 @@
 <?php 
 
-
 class ExcelExport {
 
     public $db;
@@ -52,6 +51,7 @@ class ExcelExport {
                 }
 
                 echo "<pre>";
+                echo "Días a Importar"
                 print_r($arr_dias);
                 echo "</pre>";
 
@@ -68,7 +68,6 @@ class ExcelExport {
                     $idlector = $cell[4];
                     $empleado = $cell[10];
                     $area = $cell[21];
-
 
                     /*
                     $queryPersona = "INSERT INTO persona(`idpersona`, `nombre`, `sexo_idsexo`, `ciudad_idciudad`) VALUES (NULL, '$empleado', 2, 1)"; 
@@ -106,9 +105,6 @@ class ExcelExport {
                         echo "<br>NO persona <br>".$queryPersona."<br>";
                     }
                     */
-
-
-
 
                     #
                     $query = "SELECT idempleado FROM `empleado` WHERE idlector = $idlector"; 
@@ -165,7 +161,6 @@ class ExcelExport {
 
                     }
                     */
-
                 }
 
                 // LINEA PAR
@@ -175,21 +170,15 @@ class ExcelExport {
                     foreach ($cell as $key => $value) {
                         if (trim($cell[$key]) !== '') {
 
-
-                            echo "cell[key]". $cell[$key];
-
                             $arr_horas = str_split($cell[$key], 5);
 
                             array_push($arr_checkout, array('idempleado' => $idempleado, 'idlector' => $idlector, 'fecha' => $arr_dias[$key], 'horas' => $arr_horas));
                         }
                     }
                 }
-
             }
-
             $i++;
         }
-
 
         foreach ($arr_checkout as $key => $value) {
             if ($arr_checkout[$key]['fecha'] !== '') {
@@ -205,9 +194,9 @@ class ExcelExport {
                     $lastInsert = $db->lastInsertId();
 
                     if ($lastInsert > 0){
-                        echo "<br>SI<br>";
+                        echo "<br>.<br>";
                     } else {
-                        echo "<br>NO <br>".$query."<br>";
+                        echo "<br>NO SE INSERTÓ EL REGISTRO:<br>".$query."<br>";
                     }
 
                     $estado = ($estado === 1) ? 2 : 1;
@@ -216,12 +205,9 @@ class ExcelExport {
             }
         }
 
-
         echo "<pre>";
         print_r($arr_checkout);
         echo "</pre>";
-
-
 
     }
 
