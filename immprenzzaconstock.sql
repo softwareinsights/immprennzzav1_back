@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-03-2018 a las 18:58:46
+-- Tiempo de generación: 12-03-2018 a las 20:39:28
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -171,14 +171,6 @@ CREATE TABLE `checkoutestado` (
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `checkoutestado`
---
-
-INSERT INTO `checkoutestado` (`idcheckoutestado`, `nombre`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
-(1, 'ENTRA', NULL, NULL, '2018-03-03 06:52:30', '2018-03-03 06:54:02'),
-(2, 'SALE', NULL, NULL, '2018-03-03 06:52:30', '2018-03-03 06:54:06');
-
 -- --------------------------------------------------------
 
 --
@@ -280,6 +272,29 @@ CREATE TABLE `empleado` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Empleado||fechaIngreso.Fecha de Ingreso,persona_persona_idpersona.Empleado,area_area_idarea.Área';
+
+--
+-- Volcado de datos para la tabla `empleado`
+--
+
+INSERT INTO `empleado` (`idempleado`, `area_idarea`, `persona_idpersona`, `idlector`, `fechaIngreso`, `eficiencia`, `si_user_idsi_user`, `horaEntrada`, `horaSalida`, `horaComidaInicia`, `horaComidaTermina`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
+(74, 39, 60, 1, '2017-06-01', NULL, 7, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 04:47:39'),
+(75, 40, 61, 18, '2017-01-05', 44.62, 8, '09:00:00', '17:00:00', '13:00:00', '14:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(76, 41, 62, 14, '2018-02-21', 83.02, 9, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(77, 40, 63, 19, '2017-11-30', 32.38, 10, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(78, 40, 64, 5, '2018-03-09', NULL, 11, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 18:10:56'),
+(79, 39, 65, 6, '0000-00-00', 76.79, 12, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(80, 45, 66, 7, '2018-01-11', 99.4, 13, '09:00:00', '18:00:00', '02:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(81, 45, 67, 8, '2018-03-02', 66.38, 14, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(82, 40, 68, 9, '0000-00-00', 62.55, 15, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(83, 39, 69, 10, '2018-03-07', 51.03, 16, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(84, 39, 70, 11, '0000-00-00', NULL, 17, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 18:14:18'),
+(85, 40, 71, 12, '0000-00-00', 78.96, 18, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(86, 41, 72, 13, '0000-00-00', 91.79, 19, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(87, 40, 73, 20, '0000-00-00', 32.38, 20, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(88, 40, 74, 16, '0000-00-00', 52.54, 21, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:15:43'),
+(89, 41, 75, 15, '0000-00-00', 71.27, 22, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 21:14:13'),
+(90, 39, 76, 25, '0000-00-00', NULL, 23, '09:00:00', '18:00:00', '14:00:00', '15:00:00', NULL, NULL, '2018-03-03 06:30:13', '2018-03-09 18:14:18');
 
 -- --------------------------------------------------------
 
@@ -529,6 +544,31 @@ CREATE TABLE `persona` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Persona||nombre.Nombre,apellidoPaterno.Apellido Paterno,apellidoMaterno.Apellido Materno,emailPersonal.Email,telefonoCasa.Teléfono Casa,telefonoOficina.Teléfono Oficina,sexo.Sexo,ciudad.Ciudad';
+
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`idpersona`, `nombre`, `apellidoPaterno`, `apellidoMaterno`, `emailPersonal`, `telefonoCasa`, `telefonoOficina`, `edad`, `sexo_idsexo`, `ciudad_idciudad`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
+(60, 'Amira', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(61, 'Alex', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(62, 'Beto', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(63, 'Miguel', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(64, 'Jonathan', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(65, 'Luis', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(66, 'Violeta', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
+(67, 'Rocio', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(68, 'Yahir', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(69, 'Issac', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(70, 'Abraham', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(71, 'Gerardo', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(72, 'Leo', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(73, 'Raul', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(74, 'Ray', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(75, 'Socrates', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(76, 'Jessy', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
+(77, 'PABLO', 'NERUDA', 'CASAS', 'P@CASAS.COM', '134545325', '7653633', 55, 2, 1, NULL, 1, '2018-03-03 19:30:53', '2018-03-03 19:30:53'),
+(78, 'César Alonso', 'Gavilanes', 'Magaña', 'cesar_alonso_m_g@hotmail.com', '0134112345365', '324213423', 35, 2, 1, NULL, 1, '2018-03-05 19:05:47', '2018-03-05 19:05:47');
 
 -- --------------------------------------------------------
 
