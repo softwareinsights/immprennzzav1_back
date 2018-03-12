@@ -20,23 +20,29 @@ Empleado.allByAreaWithIdOrdenTarea = (idordentarea, created_by, next) => {
             return next(null, { success: false, result: ordentarea, message: 'Solo es posible encontrar registros propios' });
         else {
 
-            // BUSCA LOS EMPLEADOS CON LA MISMA ÁREA
-            if (created_by) {
-                query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? AND empleado.created_by = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
-                keys = [ordentarea[0].idarea, created_by];
-            } else {
-                query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
-                keys = [ordentarea[0].idarea];
-            }
+            if (ordentarea[0]) {
 
-            connection.query(query, keys, (error, result) => {
-                if(error)
-                    return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
-                else if (result.affectedRows === 0)
-                    return next(null, { success: false, result: result, message: 'Solo es posible encontrar registros propios' });
-                else
-                    return next(null, { success: true, result: result, message: 'Empleado encontrad@' });
-            });
+                // BUSCA LOS EMPLEADOS CON LA MISMA ÁREA
+                if (created_by) {
+                    query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? AND empleado.created_by = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
+                    keys = [ordentarea[0].idarea, created_by];
+                } else {
+                    query = 'SELECT empleado.*, _area_idarea.nombre as area_area_idarea , _persona_idpersona.nombre as persona_persona_idpersona , _si_user_idsi_user.email as si_user_si_user_idsi_user FROM empleado INNER JOIN area as _area_idarea ON _area_idarea.idarea = empleado.area_idarea INNER JOIN persona as _persona_idpersona ON _persona_idpersona.idpersona = empleado.persona_idpersona INNER JOIN si_user as _si_user_idsi_user ON _si_user_idsi_user.idsi_user = empleado.si_user_idsi_user   WHERE empleado.area_idarea = ? HAVING empleado.baja IS NULL OR empleado.baja = false';
+                    keys = [ordentarea[0].idarea];
+                }
+
+                connection.query(query, keys, (error, result) => {
+                    if(error)
+                        return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se encontraba el registro' });
+                    else if (result.affectedRows === 0)
+                        return next(null, { success: false, result: result, message: 'Solo es posible encontrar registros propios' });
+                    else
+                        return next(null, { success: true, result: result, message: 'Empleado encontrad@' });
+                });
+
+            } else {
+                return next(null, { success: false, result: ordentarea, message: 'Tarea de Orden no encontrada' });
+            }
 
         }
     });

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-03-2018 a las 07:49:57
+-- Tiempo de generación: 12-03-2018 a las 18:58:46
 -- Versión del servidor: 10.1.9-MariaDB
 -- Versión de PHP: 5.6.15
 
@@ -43,6 +43,42 @@ CREATE TABLE `abono` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `accuracyestimacion`
+--
+
+CREATE TABLE `accuracyestimacion` (
+  `idaccuracyestimacion` int(11) NOT NULL COMMENT '0|Idaccuracytiempo',
+  `empleado_idempleado` int(11) NOT NULL COMMENT '1|Empleado|**nombre persona.idpersona empleado.persona_idpersona',
+  `ordentarea_idordentarea` int(11) NOT NULL COMMENT '1|Tarea|**nombre tarea.idtarea ordentarea.tarea_idtarea',
+  `retraso` time NOT NULL COMMENT '1|Retraso en Miinutos',
+  `accuracy` int(2) DEFAULT NULL COMMENT '1|Tino',
+  `baja` tinyint(1) DEFAULT NULL COMMENT '0|',
+  `created_by` int(11) DEFAULT NULL COMMENT '0|',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
+  `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Presición de Empleados en Estimación de Tareas||fecha.Fecha,empleado_empleado_idempleado.Empleado';
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `accuracytiempo`
+--
+
+CREATE TABLE `accuracytiempo` (
+  `idaccuracytiempo` int(11) NOT NULL COMMENT '0|Idaccuracytiempo',
+  `empleado_idempleado` int(11) NOT NULL COMMENT '1|Empleado|**nombre persona.idpersona empleado.persona_idpersona',
+  `fecha` date DEFAULT NULL COMMENT '1|Fecha Evaluando',
+  `retraso` int(8) NOT NULL DEFAULT '0',
+  `accuracy` float DEFAULT NULL COMMENT '1|Tino',
+  `baja` tinyint(1) DEFAULT NULL COMMENT '0|',
+  `created_by` int(11) DEFAULT NULL COMMENT '0|',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
+  `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Presición de Empleados en Tiempos Laborados||fecha.Fecha,empleado_empleado_idempleado.Empleado';
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `alerta`
 --
 
@@ -68,8 +104,8 @@ CREATE TABLE `alerta` (
 CREATE TABLE `archivo` (
   `idarchivo` int(11) NOT NULL COMMENT '0|',
   `ordentarea_idordentarea` int(11) NOT NULL COMMENT '1|Tarea|**nombre tarea.idtarea ordentarea.tarea_idtarea',
-  `url` varchar(55) NOT NULL COMMENT '1|Url',
-  `tipo` varchar(15) NOT NULL COMMENT '1|Tipo de Archivo',
+  `url` varchar(255) NOT NULL COMMENT '1|Url',
+  `tipo` varchar(65) NOT NULL COMMENT '1|Tipo de Archivo',
   `baja` tinyint(1) DEFAULT NULL COMMENT '0|',
   `created_by` int(11) DEFAULT NULL COMMENT '0|',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
@@ -134,6 +170,14 @@ CREATE TABLE `checkoutestado` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `checkoutestado`
+--
+
+INSERT INTO `checkoutestado` (`idcheckoutestado`, `nombre`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
+(1, 'ENTRA', NULL, NULL, '2018-03-03 06:52:30', '2018-03-03 06:54:02'),
+(2, 'SALE', NULL, NULL, '2018-03-03 06:52:30', '2018-03-03 06:54:06');
 
 -- --------------------------------------------------------
 
@@ -237,29 +281,6 @@ CREATE TABLE `empleado` (
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Empleado||fechaIngreso.Fecha de Ingreso,persona_persona_idpersona.Empleado,area_area_idarea.Área';
 
---
--- Volcado de datos para la tabla `empleado`
---
-
-INSERT INTO `empleado` (`idempleado`, `area_idarea`, `persona_idpersona`, `idlector`, `fechaIngreso`, `eficiencia`, `si_user_idsi_user`, `horaEntrada`, `horaSalida`, `horaComidaInicia`, `horaComidaTermina`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
-(74, 39, 60, 1, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(75, 40, 61, 18, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(76, 41, 62, 14, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(77, 40, 63, 19, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(78, 40, 64, 5, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(79, 39, 65, 6, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(80, 45, 66, 7, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(81, 45, 67, 8, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(82, 40, 68, 9, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(83, 39, 69, 10, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(84, 39, 70, 11, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(85, 40, 71, 12, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(86, 41, 72, 13, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(87, 40, 73, 20, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(88, 40, 74, 16, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(89, 41, 75, 15, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13'),
-(90, 39, 76, 25, '0000-00-00', NULL, 1, '00:00:00', '00:00:00', NULL, NULL, NULL, NULL, '2018-03-03 06:30:13', '2018-03-03 06:30:13');
-
 -- --------------------------------------------------------
 
 --
@@ -324,7 +345,8 @@ INSERT INTO `estado` (`idestado`, `nombre`, `baja`, `created_by`, `created_at`, 
 (8, 'ADEUDANDO FINALIZADO', NULL, 1, '2018-02-06 17:51:26', '2018-02-06 17:51:26'),
 (9, 'PAGADO FINALIZADO', NULL, 1, '2018-02-06 17:51:37', '2018-02-06 17:51:37'),
 (10, 'REALIZADO SIN ENTREGAR', NULL, 1, '2018-03-01 20:26:11', '2018-03-01 20:26:11'),
-(11, 'FINALIZADO', NULL, 1, '2018-03-01 20:26:39', '2018-03-01 20:26:39');
+(11, 'FINALIZADO', NULL, 1, '2018-03-01 20:26:39', '2018-03-01 20:26:39'),
+(12, 'ENTREGADO', NULL, 1, '2018-03-07 18:21:15', '2018-03-07 18:21:15');
 
 -- --------------------------------------------------------
 
@@ -348,7 +370,9 @@ CREATE TABLE `estadoscrum` (
 INSERT INTO `estadoscrum` (`idestadoscrum`, `nombre`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
 (1, 'POR HACERSE', NULL, 1, '2018-03-01 20:05:10', '2018-03-01 20:05:10'),
 (2, 'TRABAJANDO', NULL, 1, '2018-03-01 20:05:18', '2018-03-01 20:05:18'),
-(3, 'HECHA', NULL, 1, '2018-03-01 20:05:25', '2018-03-01 20:05:25');
+(3, 'HECHA', NULL, 1, '2018-03-01 20:05:25', '2018-03-01 20:05:25'),
+(4, 'FINALIZADA', NULL, 1, '2018-03-07 15:04:52', '2018-03-07 15:04:52'),
+(5, 'CANCELADA', NULL, 1, '2018-03-07 15:04:57', '2018-03-07 15:04:57');
 
 -- --------------------------------------------------------
 
@@ -396,6 +420,7 @@ CREATE TABLE `orden` (
   `abonado` float DEFAULT NULL COMMENT '1|Monto Abonado',
   `adeudo` float DEFAULT NULL COMMENT '1|Monto Adeudado',
   `factura` tinyint(1) DEFAULT NULL COMMENT '1|Factura',
+  `comentarios` varchar(355) DEFAULT NULL,
   `baja` tinyint(1) DEFAULT NULL COMMENT '0|',
   `created_by` int(11) DEFAULT NULL COMMENT '0|',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
@@ -505,29 +530,6 @@ CREATE TABLE `persona` (
   `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '0|'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='1|1|Persona||nombre.Nombre,apellidoPaterno.Apellido Paterno,apellidoMaterno.Apellido Materno,emailPersonal.Email,telefonoCasa.Teléfono Casa,telefonoOficina.Teléfono Oficina,sexo.Sexo,ciudad.Ciudad';
 
---
--- Volcado de datos para la tabla `persona`
---
-
-INSERT INTO `persona` (`idpersona`, `nombre`, `apellidoPaterno`, `apellidoMaterno`, `emailPersonal`, `telefonoCasa`, `telefonoOficina`, `edad`, `sexo_idsexo`, `ciudad_idciudad`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
-(60, 'Amira', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(61, 'Alex', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(62, 'Beto', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(63, 'Miguel', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(64, 'Jonathan', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(65, 'Luis', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(66, 'Violeta', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:52', '2018-03-03 06:06:52'),
-(67, 'Rocio', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(68, 'Yahir', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(69, 'Issac', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(70, 'Abraham', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(71, 'Gerardo', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(72, 'Leo', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(73, 'Raul', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(74, 'Ray', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(75, 'Socrates', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53'),
-(76, 'Jessy', '', NULL, NULL, NULL, NULL, NULL, 2, 1, NULL, NULL, '2018-03-03 06:06:53', '2018-03-03 06:06:53');
-
 -- --------------------------------------------------------
 
 --
@@ -558,10 +560,12 @@ CREATE TABLE `producto` (
 --
 
 CREATE TABLE `salidastock` (
-  `idsalidastockcol` int(11) NOT NULL COMMENT '0|',
+  `idsalidastock` int(11) NOT NULL COMMENT '0|',
   `ordentarea_idordentarea` int(11) NOT NULL COMMENT '1|Tarea de Orden|idordentarea',
   `stock_idstock` int(11) NOT NULL COMMENT '1|Producto en Stock|nombre',
   `cantidad` int(5) NOT NULL COMMENT '1|Cantidad Restada a Stock',
+  `fecha` date NOT NULL,
+  `hora` time NOT NULL,
   `baja` tinyint(1) DEFAULT NULL COMMENT '0|',
   `created_by` int(11) DEFAULT NULL COMMENT '0|',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '0|',
@@ -644,7 +648,13 @@ INSERT INTO `si_modulo` (`idsi_modulo`, `nombre`, `baja`, `created_by`, `created
 (61, 'tipoalerta', 0, NULL, '2018-02-06 14:41:47', '2018-02-06 14:41:47'),
 (62, 'tipoprecio', 0, NULL, '2018-02-06 14:41:47', '2018-02-06 14:41:47'),
 (63, 'stock', 0, 1, '2018-02-09 18:48:58', '2018-02-09 18:48:58'),
-(64, 'salidastock', 0, 1, '2018-02-09 18:49:04', '2018-02-09 18:49:04');
+(64, 'salidastock', 0, 1, '2018-02-09 18:49:04', '2018-02-09 18:49:04'),
+(65, 'dashboard', 0, 1, '2018-03-07 14:47:49', '2018-03-07 14:47:49'),
+(66, 'accuracyestimacion', 0, 0, '2018-03-08 19:11:06', '2018-03-08 19:11:06'),
+(67, 'accuracytiempo', 0, 0, '2018-03-08 19:11:06', '2018-03-08 19:11:06'),
+(68, 'accuracyestimacion', 0, 0, '2018-03-08 19:11:17', '2018-03-08 19:11:17'),
+(69, 'accuracytiempo', 0, 1, '2018-03-08 19:11:17', '2018-03-08 19:11:17'),
+(70, 'change-password', 0, 1, '2018-03-09 15:23:53', '2018-03-09 15:23:53');
 
 -- --------------------------------------------------------
 
@@ -688,11 +698,19 @@ INSERT INTO `si_permiso` (`idsi_permiso`, `acceso`, `Rol_idsi_rol`, `Modulo_idsi
 (10, 1, 4, 42, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, '2018-03-02 05:21:32', '2018-03-02 05:33:40'),
 (11, 0, 4, 41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:21:50', '2018-03-02 05:21:50'),
 (12, 0, 4, 50, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:22:08', '2018-03-02 05:22:08'),
-(13, 0, 4, 43, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, '2018-03-02 05:29:17', '2018-03-02 05:37:18'),
+(13, 0, 4, 43, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, '2018-03-02 05:29:17', '2018-03-04 03:34:12'),
 (14, 0, 4, 45, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:29:39', '2018-03-02 05:29:39'),
 (15, 1, 4, 56, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, '2018-03-02 05:33:18', '2018-03-02 05:33:18'),
 (16, 0, 4, 55, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:40:19', '2018-03-02 05:40:19'),
-(17, 0, 4, 58, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:40:27', '2018-03-02 05:40:27');
+(17, 0, 4, 58, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-02 05:40:27', '2018-03-02 05:40:27'),
+(18, 1, 5, 56, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, '2018-03-04 02:56:07', '2018-03-04 02:56:07'),
+(19, 1, 5, 32, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, '2018-03-04 02:57:07', '2018-03-04 02:57:17'),
+(20, 0, 5, 61, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-04 02:57:27', '2018-03-04 02:57:27'),
+(21, 0, 5, 41, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-04 02:57:41', '2018-03-04 02:57:41'),
+(22, 0, 5, 55, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-04 03:26:45', '2018-03-04 03:26:45'),
+(23, 0, 5, 58, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, '2018-03-04 03:26:56', '2018-03-04 03:26:56'),
+(24, 1, 5, 42, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, '2018-03-04 03:27:23', '2018-03-04 03:27:23'),
+(25, 0, 5, 43, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, '2018-03-04 03:28:09', '2018-03-04 03:28:09');
 
 -- --------------------------------------------------------
 
@@ -738,7 +756,10 @@ INSERT INTO `si_rol` (`idsi_rol`, `nombre`, `baja`, `created_by`, `created_at`, 
 (1, 'ADMINISTRADOR', 0, NULL, '2018-02-06 14:41:47', '2018-02-06 14:41:47'),
 (2, 'DISEÑO', 0, 1, '2018-03-01 05:57:17', '2018-03-01 05:57:17'),
 (3, 'IMPRESIÓN', 0, 1, '2018-03-01 05:57:28', '2018-03-01 05:57:28'),
-(4, 'EMPLEADO', 0, 1, '2018-03-02 05:20:33', '2018-03-02 05:20:33');
+(4, 'EMPLEADO', 0, 1, '2018-03-02 05:20:33', '2018-03-02 05:20:33'),
+(5, 'Empleado', 0, 1, '2018-03-04 02:33:17', '2018-03-04 02:33:17'),
+(6, 'X', 1, 1, '2018-03-07 06:22:03', '2018-03-07 06:22:06'),
+(7, 'W', 1, 1, '2018-03-07 06:22:10', '2018-03-07 06:22:33');
 
 -- --------------------------------------------------------
 
@@ -764,11 +785,28 @@ CREATE TABLE `si_user` (
 --
 
 INSERT INTO `si_user` (`idsi_user`, `usuario`, `email`, `password`, `Rol_idsi_rol`, `super`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
-(1, 'SuperUsuario', 'admin@manyimmprenzza8.com', 0x243261243130246362766c3943474b4d525146327a564a4a577945747549676c4f4651384f5056517951436c4c6d344e50314e386e4d4a6175476b47, 1, 1, 0, NULL, '2018-02-06 14:41:47', '2018-02-06 14:41:47'),
+(1, 'SuperUsuario', 'admin@manyimmprenzza8.com', 0x24326124313024417841616e454c6a534c5369636a36374b5378716a4f593344674e316355795334717369705954574c7338633571752f2e55724d65, 1, 1, 0, NULL, '2018-02-06 14:41:47', '2018-03-09 17:21:59'),
 (3, 'maria', 'maria@immprenzza.com', 0x313233343536000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, 4, 0, 0, 1, '2018-03-01 05:57:20', '2018-03-02 05:23:12'),
 (4, 'pedro', 'pedro@immprenzza.com', 0x313233343536000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, 4, 0, 0, 1, '2018-03-01 05:59:40', '2018-03-02 05:23:18'),
 (5, 'JOSÉ', 'jose@immprenzza.com', 0x24326124313024495472683175532e2f7575376964702e7645555775754d694d757a2e6f7a756752485531754b623048416741683949325a75736557, 3, 0, 0, 1, '2018-03-01 06:00:07', '2018-03-01 06:00:07'),
-(6, 'empleado1', 'empleado1@immprenzza.com', 0x243261243130242f6d39324a5a4e65716a51652e3363454b364931592e4e47445162626d506765633250466767665477535a75747061505763376f36, 4, 0, 0, 1, '2018-03-02 05:22:41', '2018-03-02 05:22:41');
+(6, 'empleado1', 'empleado1@immprenzza.com', 0x243261243130242f6d39324a5a4e65716a51652e3363454b364931592e4e47445162626d506765633250466767665477535a75747061505763376f36, 4, 0, 0, 1, '2018-03-02 05:22:41', '2018-03-02 05:22:41'),
+(7, 'Amira', 'amira@immprenzza.com', 0x243261243130244a47313252364e5165726d305a507a6572546567682e706a5831454d766743687934416e502f774c2e2f6c77726c6e4431582f6257, 5, 0, 0, 1, '2018-03-04 02:35:00', '2018-03-04 02:35:00'),
+(8, 'Alex', 'alex@immprenzza.com', 0x24326124313024796b627a2e57356d75414c596c7662362f353544646535373977742f37575977677452586b434f5030754d495334574e4d33337661, 5, 0, 0, 1, '2018-03-04 02:35:16', '2018-03-04 02:35:16'),
+(9, 'Beto', 'beto@immprenzza.com', 0x24326124313024316d2e5a556c79544937567a576f6e4b794b44564b2e6678526a326a68364b556868326c443837685a6c7242762f64524e616c4553, 5, 0, 0, 1, '2018-03-04 02:35:33', '2018-03-04 02:35:33'),
+(10, 'Miguel', 'miguel@immprenzza.com', 0x24326124313024697a503376625a576d5935722e682f4a687a7645374f516b51794d56644b33325731416a317658395354737165656b7a7449495761, 5, 0, 0, 1, '2018-03-04 02:35:46', '2018-03-04 02:35:46'),
+(11, 'Jonathan', 'jonathan@immprenzza.com', 0x24326124313024356c49584e43334472492f566f6e6e32776855622e4f5239465672702e56626a7a51714e312f6943545773547347674131562e3365, 5, 0, 0, 1, '2018-03-04 02:36:05', '2018-03-04 02:36:05'),
+(12, 'Luis', 'luis@immprenzza.com', 0x24326124313024617a61716a6357656b73775449386f6f7270396a564f56414c525141694d4c4a4549657437574e424e326564424e5a724d47517575, 5, 0, 0, 1, '2018-03-04 02:36:18', '2018-03-04 02:36:18'),
+(13, 'Violeta', 'violeta@immprenzza.com', 0x243261243130244e4e734841316453484f766a3064617843752f6d592e3771506e484c6238306c416b34392e71796257756b31684c79484c48793343, 5, 0, 0, 1, '2018-03-04 02:36:32', '2018-03-04 02:36:32'),
+(14, 'Rocio', 'rocio@immprenzza.com', 0x24326124313024596238495244356c64557a4873556f594a76706e484f49685251364358346c71444d5a2f564f6a2e5a33796f762e72617275464769, 5, 0, 0, 1, '2018-03-04 02:36:48', '2018-03-04 02:36:48'),
+(15, 'Yahir', 'yahir@immprenzza.com', 0x2432612431302445596a477159355545672f664f6c6b4b494b7a4a63753665633934556957587843777244753447525155662e535948473271374871, 5, 0, 0, 1, '2018-03-04 02:37:01', '2018-03-04 02:37:01'),
+(16, 'Issac', 'issac@immprenzza.com', 0x2432612431302465332f5378547755346e514d5749464952665a615575394e43562e5277436a4b4973314f6278564a4b2e6f757a4b50334a79453661, 5, 0, 0, 1, '2018-03-04 02:37:19', '2018-03-04 02:37:19'),
+(17, 'Abraham', 'abraham@immprenzza.com', 0x24326124313024644d6f4242423743314f7361544f494f77516841457545683265737a79347336567a3278544370624b6541346a475a50626c557832, 5, 0, 0, 1, '2018-03-04 02:37:37', '2018-03-04 02:37:37'),
+(18, 'Gerardo', 'gerardo@immprenzza.com', 0x24326124313024784d6354464e49653758474951656641746565304e7565342f544e42646e42635339436e7947336c70737a67795378326c726f5569, 5, 0, 0, 1, '2018-03-04 02:37:53', '2018-03-04 02:37:53'),
+(19, 'Leo', 'leo@immprenzza.com', 0x243261243130244c63424a715436736235764d3461552f4a314e612e4f733054636b695858726e316a7a36524a49774d2f51546d6750627852544a2e, 5, 0, 0, 1, '2018-03-04 02:38:07', '2018-03-04 02:38:07'),
+(20, 'Raul', 'raul@immprenzza.com', 0x2432612431302474617a555730734b4a502e4d466a535945764b665a65586e316665667a473975596d55746f4b7a4a694e5256527957396f50347075, 5, 0, 0, 1, '2018-03-04 02:38:24', '2018-03-04 02:38:24'),
+(21, 'Ray', 'ray@immprenzza.com', 0x243261243130246a4557625a304a786d737658676664644c4f64452f654a4a536439584669504646655736593036644d7044346176676e6e37656f61, 5, 0, 0, 1, '2018-03-04 02:38:36', '2018-03-04 02:38:36'),
+(22, 'Socrates', 'socrates@immprenzza.com', 0x243261243130245a516561617050676942616971324d6b6d4a61675a6547497a6b6e58564e6364676d6a62756b67444531537a4c6f383342424c3461, 5, 0, 0, 1, '2018-03-04 02:38:52', '2018-03-04 02:38:52'),
+(23, 'Jessy', 'jessy@immprenzza.com', 0x243261243130246a32764c526144446c684571534e6176684b33516d654253417342426144544c54734944756f2e5848537854466b463066336a6332, 5, 0, 0, 1, '2018-03-04 02:39:06', '2018-03-04 02:39:06');
 
 -- --------------------------------------------------------
 
@@ -825,7 +863,9 @@ CREATE TABLE `tipoalerta` (
 --
 
 INSERT INTO `tipoalerta` (`idtipoalerta`, `nombre`, `baja`, `created_by`, `created_at`, `modified_at`) VALUES
-(1, 'RECLAMO', NULL, 1, '2018-02-06 21:10:33', '2018-02-06 21:10:33');
+(1, 'RECLAMO', NULL, 1, '2018-02-06 21:10:33', '2018-02-06 21:10:33'),
+(2, 'SALUDO', NULL, 1, '2018-03-04 03:06:02', '2018-03-04 03:06:02'),
+(3, 'AVISO', NULL, 1, '2018-03-04 03:06:07', '2018-03-04 03:06:07');
 
 -- --------------------------------------------------------
 
@@ -862,6 +902,24 @@ ALTER TABLE `abono`
   ADD PRIMARY KEY (`idabono`),
   ADD UNIQUE KEY `idabono_UNIQUE` (`idabono`),
   ADD KEY `fk_abono_orden1_idx` (`orden_idorden`);
+
+--
+-- Indices de la tabla `accuracyestimacion`
+--
+ALTER TABLE `accuracyestimacion`
+  ADD PRIMARY KEY (`idaccuracyestimacion`,`retraso`),
+  ADD UNIQUE KEY `idaccuracytiempo_UNIQUE` (`idaccuracyestimacion`),
+  ADD KEY `fk_accuracytiempo_empleado1_idx` (`empleado_idempleado`),
+  ADD KEY `fk_accuracyestimacion_ordentarea1_idx` (`ordentarea_idordentarea`);
+
+--
+-- Indices de la tabla `accuracytiempo`
+--
+ALTER TABLE `accuracytiempo`
+  ADD PRIMARY KEY (`idaccuracytiempo`),
+  ADD UNIQUE KEY `idaccuracytiempo_UNIQUE` (`idaccuracytiempo`),
+  ADD UNIQUE KEY `unico1` (`empleado_idempleado`,`fecha`),
+  ADD KEY `fk_accuracytiempo_empleado1_idx` (`empleado_idempleado`);
 
 --
 -- Indices de la tabla `alerta`
@@ -1050,9 +1108,8 @@ ALTER TABLE `producto`
 -- Indices de la tabla `salidastock`
 --
 ALTER TABLE `salidastock`
-  ADD PRIMARY KEY (`idsalidastockcol`,`ordentarea_idordentarea`,`stock_idstock`),
-  ADD UNIQUE KEY `idsalidastockcol_UNIQUE` (`idsalidastockcol`),
-  ADD UNIQUE KEY `tarea_stock_unique` (`ordentarea_idordentarea`,`stock_idstock`),
+  ADD PRIMARY KEY (`idsalidastock`,`ordentarea_idordentarea`,`stock_idstock`),
+  ADD UNIQUE KEY `idsalidastockcol_UNIQUE` (`idsalidastock`),
   ADD KEY `fk_ordentarea_has_stock_stock1_idx` (`stock_idstock`),
   ADD KEY `fk_ordentarea_has_stock_ordentarea1_idx` (`ordentarea_idordentarea`);
 
@@ -1136,27 +1193,37 @@ ALTER TABLE `tipoprecio`
 -- AUTO_INCREMENT de la tabla `abono`
 --
 ALTER TABLE `abono`
-  MODIFY `idabono` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=10;
+  MODIFY `idabono` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT de la tabla `accuracyestimacion`
+--
+ALTER TABLE `accuracyestimacion`
+  MODIFY `idaccuracyestimacion` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|Idaccuracytiempo', AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT de la tabla `accuracytiempo`
+--
+ALTER TABLE `accuracytiempo`
+  MODIFY `idaccuracytiempo` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|Idaccuracytiempo', AUTO_INCREMENT=493;
 --
 -- AUTO_INCREMENT de la tabla `alerta`
 --
 ALTER TABLE `alerta`
-  MODIFY `idalerta` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=11;
+  MODIFY `idalerta` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `archivo`
 --
 ALTER TABLE `archivo`
-  MODIFY `idarchivo` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|';
+  MODIFY `idarchivo` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `area`
 --
 ALTER TABLE `area`
-  MODIFY `idarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=56;
+  MODIFY `idarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT de la tabla `checkout`
 --
 ALTER TABLE `checkout`
-  MODIFY `idcheckout` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2293;
+  MODIFY `idcheckout` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2962;
 --
 -- AUTO_INCREMENT de la tabla `checkoutestado`
 --
@@ -1171,17 +1238,17 @@ ALTER TABLE `ciudad`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `concepto`
 --
 ALTER TABLE `concepto`
-  MODIFY `idconcepto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idconcepto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `egresoconcepto`
 --
 ALTER TABLE `egresoconcepto`
-  MODIFY `idegresoconcepto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idegresoconcepto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `empleado`
 --
@@ -1191,22 +1258,22 @@ ALTER TABLE `empleado`
 -- AUTO_INCREMENT de la tabla `empleadotarea`
 --
 ALTER TABLE `empleadotarea`
-  MODIFY `idempleadotarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=15;
+  MODIFY `idempleadotarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT de la tabla `empleadotareaestado`
 --
 ALTER TABLE `empleadotareaestado`
-  MODIFY `idempleadotareaestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=17;
+  MODIFY `idempleadotareaestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT de la tabla `estado`
 --
 ALTER TABLE `estado`
-  MODIFY `idestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=12;
+  MODIFY `idestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT de la tabla `estadoscrum`
 --
 ALTER TABLE `estadoscrum`
-  MODIFY `idestadoscrum` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=4;
+  MODIFY `idestadoscrum` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `formula`
 --
@@ -1216,17 +1283,17 @@ ALTER TABLE `formula`
 -- AUTO_INCREMENT de la tabla `orden`
 --
 ALTER TABLE `orden`
-  MODIFY `idorden` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idorden` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `ordenestado`
 --
 ALTER TABLE `ordenestado`
-  MODIFY `idordenestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=26;
+  MODIFY `idordenestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT de la tabla `ordenproducto`
 --
 ALTER TABLE `ordenproducto`
-  MODIFY `idordenproducto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=23;
+  MODIFY `idordenproducto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `ordentarea`
 --
@@ -1236,22 +1303,22 @@ ALTER TABLE `ordentarea`
 -- AUTO_INCREMENT de la tabla `ordentareaestado`
 --
 ALTER TABLE `ordentareaestado`
-  MODIFY `idordentareaestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=4;
+  MODIFY `idordentareaestado` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=25;
 --
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=77;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=79;
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `salidastock`
 --
 ALTER TABLE `salidastock`
-  MODIFY `idsalidastockcol` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idsalidastock` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT de la tabla `sexo`
 --
@@ -1261,12 +1328,12 @@ ALTER TABLE `sexo`
 -- AUTO_INCREMENT de la tabla `si_modulo`
 --
 ALTER TABLE `si_modulo`
-  MODIFY `idsi_modulo` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=65;
+  MODIFY `idsi_modulo` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=71;
 --
 -- AUTO_INCREMENT de la tabla `si_permiso`
 --
 ALTER TABLE `si_permiso`
-  MODIFY `idsi_permiso` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=18;
+  MODIFY `idsi_permiso` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT de la tabla `si_reporte`
 --
@@ -1276,27 +1343,27 @@ ALTER TABLE `si_reporte`
 -- AUTO_INCREMENT de la tabla `si_rol`
 --
 ALTER TABLE `si_rol`
-  MODIFY `idsi_rol` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=5;
+  MODIFY `idsi_rol` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `si_user`
 --
 ALTER TABLE `si_user`
-  MODIFY `idsi_user` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=7;
+  MODIFY `idsi_user` int(4) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT de la tabla `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `idstock` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=4;
+  MODIFY `idstock` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `tarea`
 --
 ALTER TABLE `tarea`
-  MODIFY `idtarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=5;
+  MODIFY `idtarea` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `tipoalerta`
 --
 ALTER TABLE `tipoalerta`
-  MODIFY `idtipoalerta` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=2;
+  MODIFY `idtipoalerta` int(11) NOT NULL AUTO_INCREMENT COMMENT '0|', AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `tipoprecio`
 --
@@ -1311,6 +1378,19 @@ ALTER TABLE `tipoprecio`
 --
 ALTER TABLE `abono`
   ADD CONSTRAINT `fk_abono_orden1` FOREIGN KEY (`orden_idorden`) REFERENCES `orden` (`idorden`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `accuracyestimacion`
+--
+ALTER TABLE `accuracyestimacion`
+  ADD CONSTRAINT `fk_accuracyestimacion_ordentarea1` FOREIGN KEY (`ordentarea_idordentarea`) REFERENCES `ordentarea` (`idordentarea`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_accuracytiempo_empleado10` FOREIGN KEY (`empleado_idempleado`) REFERENCES `empleado` (`idempleado`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `accuracytiempo`
+--
+ALTER TABLE `accuracytiempo`
+  ADD CONSTRAINT `fk_accuracytiempo_empleado1` FOREIGN KEY (`empleado_idempleado`) REFERENCES `empleado` (`idempleado`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `alerta`
