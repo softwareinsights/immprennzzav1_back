@@ -15,7 +15,6 @@ Dashboard.accuracytiempo = (next) => {
     query = 'SELECT e.idempleado, e.idlector, e.eficiencia, e.horaEntrada, e.horaSalida, p.nombre as empleado_empleado_idempleado, a.nombre as area_area_idarea FROM empleado as e INNER JOIN persona as p on p.idpersona = e.persona_idpersona INNER JOIN area as a on a.idarea = e.area_idarea WHERE e.eficiencia > 0 AND e.baja IS NULL OR e.baja = false ORDER BY e.eficiencia DESC LIMIT 0,10';
     keys = [];
  
-
     connection.query(query, keys, (error, maseficientes) => {
         if(error) 
             return next({ success: false, error: error, message: 'Un error ha ocurrido mientras se leían registros' });
@@ -25,12 +24,9 @@ Dashboard.accuracytiempo = (next) => {
 
             if (maseficientes[0]) {
 
-                console.log("maseficientes", maseficientes);
-
                 // MENOS EFICIENTES
                 query = 'SELECT e.idempleado, e.idlector, e.eficiencia, e.horaEntrada, e.horaSalida, p.nombre as empleado_empleado_idempleado, a.nombre as area_area_idarea FROM empleado as e INNER JOIN persona as p on p.idpersona = e.persona_idpersona INNER JOIN area as a on a.idarea = e.area_idarea WHERE e.eficiencia > 0 AND e.baja IS NULL OR e.baja = false ORDER BY e.eficiencia LIMIT 0,10';
                 keys = [];
-
 
                 connection.query(query, keys, (error, menoseficientes) => {
                     if(error) 
@@ -38,29 +34,19 @@ Dashboard.accuracytiempo = (next) => {
                     else if (menoseficientes.affectedRows === 0)
                         return next(null, { success: false, result: menoseficientes, message: 'Solo es posible leer registros propios' });
                     else {
-
                         const result = {
                             'maseficientes': maseficientes,
                             'menoseficientes': menoseficientes,
                         }
                         return next(null, { success: true, result: result, message: 'Efectividad de tiempos laborales obtenidos' });
-
                     }
                 });
-
-
             } else {
-
-                        return next(null, { success: false, result: maseficientes, message: 'No hay datos de efectividad para mostrar' });
-
+                return next(null, { success: false, result: maseficientes, message: 'No hay datos de efectividad para mostrar' });
             }
-
         }
     });
 };
-
-
-
 
 
 Dashboard.all = (next) => {

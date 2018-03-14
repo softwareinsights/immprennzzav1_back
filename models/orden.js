@@ -126,7 +126,7 @@ Orden.updateMontos = (idOrden, next) => {
     // Obtengo el abono total para esta orden
     let query = '';
     let keys = [];
-    query = 'SELECT *, COALESCE(SUM(montoPagado),0) as abonado FROM abono WHERE orden_idorden = ? AND baja IS NULL  GROUP BY orden_idorden';
+    query = 'SELECT SUM(montoPagado) as abonado, fecha, hora FROM abono WHERE orden_idorden = ? AND baja IS NULL GROUP BY orden_idorden ORDER BY idabono DESC';
     keys = [idOrden];
 
     connection.query(query, keys, (error, abono) => {
@@ -190,8 +190,8 @@ Orden.updateMontos = (idOrden, next) => {
                             const ordenestado = {
                                 'orden_idorden': idOrden,
                                 'estado_idestado': idestado,
-                                'fecha': fecha,
-                                'hora': hora
+                                'fecha': abono[0].fecha,
+                                'hora': abono[0].hora
                             }
 
                             let query = '';
