@@ -146,7 +146,7 @@ Ordentareaestado.insert = (Ordentareaestado, next) => {
 
             if (result.insertId) {
 
-                if (Ordentareaestado.estadoscrum_idestadoscrum === '4') {
+                if (Ordentareaestado.estadoscrum_idestadoscrum == '4') {
 
                     // SI SE FINALIZA MODIFICAR LA ORDEN PARA ASIGNAR LA HORA Y FECHA DE TÉRMINO
                     query = 'UPDATE ordentarea SET fechaTermina = ?, horaTermina = ? WHERE idordentarea = ?';
